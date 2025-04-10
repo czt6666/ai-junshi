@@ -60,6 +60,8 @@ const emit = defineEmits<{
 }>()
 
 const handleFileUpload = (e) => {
+  console.log(e)
+
   const file: File = e.detail.file.file
   if (file) {
     emit('upload', file)

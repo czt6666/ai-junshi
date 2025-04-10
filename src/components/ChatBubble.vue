@@ -49,7 +49,7 @@ const handleInput = () => {
 .chat-bubble {
   display: flex;
   align-items: start;
-  max-width: 80%;
+  width: 80%;
   padding: 8px 12px;
   border-radius: 12px;
   word-break: break-word;

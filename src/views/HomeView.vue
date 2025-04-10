@@ -21,10 +21,8 @@
 <script lang="ts" setup>
 import ImageUploader from '@/components/ImageUploader.vue'
 import ChatEditor from '@/components/ChatEditor.vue'
-import AutoTextarea from '@/components/AutoTextarea.vue'
 import { ref } from 'vue'
 
-const message = ref('')
 const handleUploadedFile = (file: File) => {
   console.log('收到上传的文件:', file)
   // 后续处理，如 OCR、上传至服务器等
