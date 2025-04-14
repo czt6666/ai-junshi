@@ -22,15 +22,20 @@
 <script lang="ts" setup>
 import { ref, watch, onMounted, nextTick } from 'vue'
 
-const props = defineProps<{
-  modelValue: string
-  placeholder?: string
-  disabled?: boolean
-  readonly?: boolean
-  autofocus?: boolean
-  maxScrollHeight?: number
-  rows?: number // 👈 支持初始行数
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: string
+    placeholder?: string
+    disabled?: boolean
+    readonly?: boolean
+    autofocus?: boolean
+    maxScrollHeight?: number
+    rows?: number // 👈 支持初始行数
+  }>(),
+  {
+    maxScrollHeight: 140,
+  },
+)
 
 const emit = defineEmits<{
   (e: 'update:modelValue', val: string): void
@@ -60,10 +65,7 @@ const autoAdjustHeight = () => {
       const lineHeight = 20 // 你可以根据 font-size 调整
       const minHeight = (props.rows || 1) * lineHeight
 
-      const newHeight = Math.max(
-        minHeight,
-        Math.min(textarea.value.scrollHeight, props.maxScrollHeight || 140),
-      )
+      const newHeight = Math.max(minHeight, Math.min(textarea.value.scrollHeight, props.maxScrollHeight))
 
       textarea.value.style.height = newHeight + 'px'
     }
@@ -109,7 +111,6 @@ onMounted(autoAdjustHeight)
   .textarea {
     width: 100%;
     height: 16px;
-    max-height: 140px;
     border: none;
     outline: none;
     resize: none;

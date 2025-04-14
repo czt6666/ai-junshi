@@ -1,7 +1,6 @@
 <template>
   <div class="editor-container">
     <div v-for="(item, index) in messages" :key="item.id">
-      <!-- Render different components based on message type -->
       <ChatBubble
         v-if="item.from === 'me' || item.from === 'ta'"
         :text="item.text"
@@ -17,8 +16,6 @@
     <div class="button-row">
       <button @click="addMessage('ta')">➕ 添加 ta 的聊天</button>
       <button @click="addMessage('me')">➕ 添加 me 的回复</button>
-      <!-- <button @click="addMessage('system')">➕ 添加 system 的消息</button>
-      <button @click="addMessage('time')">➕ 添加 time 的消息</button> -->
     </div>
   </div>
 </template>
@@ -35,7 +32,11 @@ type Message = {
   text: string | object // Use string for regular messages, object for complex data like system or time
 }
 
-const messages = ref<Message[]>([{ id: Date.now(), from: 'ta', text: '' }])
+const messages = ref<Message[]>([
+  { id: Date.now(), from: 'ta', text: '' },
+  { id: Date.now(), from: 'me', text: '' },
+  { id: Date.now(), from: 'ta', text: '' },
+])
 
 const addMessage = (from: 'me' | 'ta' | 'system' | 'time') => {
   let text: string | object = ''
@@ -66,7 +67,7 @@ const updateMessage = (index: number, newText: string) => {
 <style scoped>
 .editor-container {
   background: #fefae0;
-  gap: 16px;
+  gap: 12px;
   display: flex;
   flex-direction: column;
 }

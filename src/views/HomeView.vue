@@ -7,8 +7,9 @@
     <ImageUploader
       name="chat-image"
       :acceptedFileTypes="['image/png', 'image/jpeg']"
-      label="拖拽或点击上传聊天截图"
+      label="点击上传截图 或 拖入聊天记录 📤"
       maxFileSize="5MB"
+      stylePanelAspectRatio="9:16"
       @upload="handleUploadedFile"
     />
   </div>
@@ -22,14 +23,28 @@
 import ImageUploader from '@/components/ImageUploader.vue'
 import ChatEditor from '@/components/ChatEditor.vue'
 import { ref } from 'vue'
+import { useDeviceStore } from '@/stores/device'
+const store = useDeviceStore()
 
 const handleUploadedFile = (file: File) => {
   console.log('收到上传的文件:', file)
   // 后续处理，如 OCR、上传至服务器等
 }
+
+// console.log(store.getters.deviceType)
 </script>
 
 <style lang="scss" scoped>
+.a {
+  overflow: hidden;
+  padding: 0 25%;
+  width: 100%;
+  height: 300px;
+
+  v-deep .filepond--root .filepond--drop-label {
+    height: 100%;
+  }
+}
 .b {
   width: 100%;
   background-color: pink;

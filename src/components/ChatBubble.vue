@@ -1,13 +1,11 @@
 <template>
-  <div
-    :class="['chat-bubble', from === 'me' ? 'from-me' : 'from-ta', isSolid ? 'solid' : 'dashed']"
-  >
+  <div :class="['chat-bubble', from === 'me' ? 'from-me' : 'from-ta', isSolid ? 'solid' : 'dashed']">
     <AutoTextarea
       v-model="localText"
       class="chat-textarea"
       :placeholder="from === 'me' ? '我说点什么...' : 'ta说了点什么...'"
       :rows="2"
-      :max-scroll-height="999"
+      :max-scroll-height="500"
       @input="handleInput"
     />
     <button v-if="canDelete" class="delete-button" @click="$emit('delete')">✕</button>
@@ -87,6 +85,10 @@ const handleInput = () => {
 }
 
 .delete-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
   background: none;
   border: none;
   color: #888;
