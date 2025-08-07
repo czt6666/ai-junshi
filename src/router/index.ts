@@ -7,12 +7,32 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'HomePage',
       component: HomeView,
     },
     {
+      path: '/upload-img',
+      name: 'UploadImg',
+      component: () => import('@/views/UploadImg.vue'),
+    },
+    {
+      path: '/input-txt',
+      name: 'InputTxt',
+      component: () => import('@/views/InputTxt.vue'),
+    },
+    {
+      path: '/confirm',
+      name: 'Confirm',
+      component: () => import('@/views/Confirm.vue'),
+    },
+    {
+      path: '/result',
+      name: 'Result',
+      component: () => import('@/views/Result.vue'),
+    },
+    {
       path: '/test',
-      name: 'test',
+      name: 'Test',
       component: TestView,
     },
   ],

@@ -86,8 +86,8 @@ const handleInput = () => {
 
 .delete-button {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 10px;
+  right: 5px;
   transform: translate(50%, -50%);
   background: none;
   border: none;
