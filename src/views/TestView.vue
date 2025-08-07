@@ -1,11 +1,8 @@
-<template>
-  <editAbleText v-model="renderedHtml" @edit-done="handleResult" />
-</template>
+<template>{{ renderedHtml }}</template>
 
 <script lang="ts" setup>
 import MarkdownRenderer from '@/utils/MarkdownRenderer'
 import { longText } from '@/utils/MarkdownRenderer/test'
-import editAbleText from '@/components/editAbleText.vue'
 
 const renderer = new MarkdownRenderer({
   breakCode: false,
