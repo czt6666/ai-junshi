@@ -24,6 +24,8 @@ import ImageUploader from '@/components/ImageUploader.vue'
 import ChatEditor from '@/components/ChatEditor.vue'
 import { ref } from 'vue'
 import { useDeviceStore } from '@/stores/device'
+// import '@/utils/doubBaoRequest'
+import '@/utils/gptRequest'
 const store = useDeviceStore()
 
 const handleUploadedFile = (file: File) => {
