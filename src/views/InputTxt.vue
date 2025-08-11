@@ -14,7 +14,7 @@ const userDataStore = useUserDataStore()
 
 const handleConfirm = (messages: string) => {
   console.log('Confirmed messages:', messages)
-  userDataStore.setData('text', messages)
+  userDataStore.setChatHistoryText(messages)
   router.push({ name: 'Confirm' })
 }
 </script>

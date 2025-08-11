@@ -23,7 +23,7 @@ const router = createRouter({
     {
       path: '/confirm',
       name: 'Confirm',
-      component: () => import('@/views/Confirm.vue'),
+      component: () => import('@/views/ConfirmPage.vue'),
     },
     {
       path: '/result',

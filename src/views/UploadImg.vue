@@ -4,6 +4,7 @@
       name="chat-image"
       label="点击上传截图 或 拖入聊天记录 📤"
       maxFileSize="5MB"
+      allowMultiple="true"
       stylePanelAspectRatio="9:16"
       @upload="handleUploadedFile"
     />
@@ -13,8 +14,10 @@
     <button @click="confirmImage">确认</button>
   </div>
 </template>
+
 <script lang="ts" setup name="Result">
-import { ref, reactive } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
+import { saveFile } from '@/utils/indexedDb'
 import ImageUploader from '@/components/ImageUploader.vue'
 import { useUserDataStore } from '@/stores/userData'
 import { useRouter } from 'vue-router'
@@ -22,24 +25,33 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const userDataStore = useUserDataStore()
 
-const handleUploadedFile = (file: File) => {
+const handleUploadedFile = async (file: File) => {
   console.log('收到上传的文件:', file)
-  userDataStore.setData('image', file)
+
+  const id = uuidv4()
+  await saveFile(id, file)
+  userDataStore.setUserPrompt(id)
 }
 
 const confirmImage = () => {
   router.push({ name: 'Confirm' })
 }
 </script>
+
 <style lang="scss" scoped>
 .img-upload {
   overflow: hidden;
   padding: 0 25%;
   width: 100%;
-  height: 70vh;
+  max-height: 60vh;
 
-  v-deep .filepond--root .filepond--drop-label {
-    height: 100%;
+  :deep(.filepond--wrapper) {
+    .filepond--drop-label {
+      height: 100%;
+    }
+    .filepond--credits {
+      display: none;
+    }
   }
 }
 

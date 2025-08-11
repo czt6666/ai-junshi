@@ -1,18 +1,55 @@
+// stores/userData.ts
 import { defineStore } from 'pinia'
 
+export interface UserDataState {
+  systemPrompt: string
+  userPrompt: string
+  chatHistoryText: string
+  chatScreenshotList: string[] // 存 uuid
+  modelReplyHistory: {
+    id: string
+    role: 'user' | 'assistant'
+    content: string
+    timestamp: number
+  }[]
+}
+
 export const useUserDataStore = defineStore('userData', {
-  state: () => ({
-    type: '', // 'image' 或 'text'
-    content: null as string | File | null, // 文本内容或原生 File 对象
+  state: (): UserDataState => ({
+    systemPrompt: '',
+    userPrompt: '',
+    chatHistoryText: '',
+    chatScreenshotList: [],
+    modelReplyHistory: [],
   }),
+
   actions: {
-    setData(type: string, content: string | File) {
-      this.type = type
-      this.content = content
+    setUserPrompt(prompt: string) {
+      this.userPrompt = prompt
+    },
+    setChatHistoryText(text: string) {
+      this.chatHistoryText = text
+    },
+    addScreenshot(id: string) {
+      if (!this.chatScreenshotList.includes(id)) {
+        this.chatScreenshotList.push(id)
+      }
+    },
+    addModelReply(reply: { id: string; role: 'user' | 'assistant'; content: string; timestamp: number }) {
+      this.modelReplyHistory.push(reply)
     },
     clear() {
-      this.type = ''
-      this.content = null
+      this.systemPrompt = ''
+      this.userPrompt = ''
+      this.chatHistoryText = ''
+      this.chatScreenshotList = []
+      this.modelReplyHistory = []
     },
+  },
+
+  persist: {
+    key: 'user-data',
+    storage: localStorage,
+    // pick: ['systemPrompt', 'userPrompt', 'chatHistoryText', 'modelReplyHistory', 'chatScreenshotList'], // 持久化 uuid
   },
 })

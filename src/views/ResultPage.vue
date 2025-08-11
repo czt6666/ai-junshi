@@ -13,30 +13,37 @@
 import { ref, onMounted } from 'vue'
 import { useUserDataStore } from '@/stores/userData'
 import { storeToRefs } from 'pinia'
+import { getFile } from '@/utils/indexedDb'
 import { useRouter } from 'vue-router'
 import { aiJunshiOnce } from '@/utils/gptRequest'
 
 const router = useRouter()
 const userDataStore = useUserDataStore()
-const { type, content } = storeToRefs(userDataStore)
+const { userPrompt, chatHistoryText, chatScreenshotList } = storeToRefs(userDataStore)
 
-// 判断输入类型
-const image = type.value === 'image' && content.value instanceof File ? content.value : null
-const text = type.value === 'text' ? (content.value as string) : null
 const outputText = ref<string>('正在生成回复...')
 
 const getJunshiResponse = async () => {
-  const res = await aiJunshiOnce(text || '', image ? await fileToBase64URL(image) : undefined)
+  let imageBase64: string | undefined
+  if (chatScreenshotList.value.length > 0) {
+    const fileBlob = await getFile(chatScreenshotList.value[0])
+    if (fileBlob) {
+      imageBase64 = await fileToBase64URL(fileBlob)
+    }
+  }
+
+  const prompt = userPrompt.value ? `${userPrompt.value} \n\n` : ''
+  const chatText = chatHistoryText.value ? `下面是我的聊天记录：\n ${chatHistoryText.value}` : ''
+  const text = prompt + chatText
+  const res = await aiJunshiOnce(text || '', imageBase64 ? imageBase64 : undefined)
   outputText.value = res
 }
 
-const fileToBase64URL = (file: File): Promise<string> => {
+// utils/fileToBase64.ts
+async function fileToBase64URL(file: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
-    reader.onload = () => {
-      const result = reader.result as string
-      resolve(result)
-    }
+    reader.onload = () => resolve(reader.result as string)
     reader.onerror = reject
     reader.readAsDataURL(file)
   })

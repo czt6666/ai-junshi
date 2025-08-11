@@ -3,8 +3,9 @@
     <h2 class="title">请选择操作方式</h2>
     <p class="desc">您希望通过哪种方式进行？</p>
     <div class="btn-group">
-      <button class="select-btn" @click="goTo('upload')">上传图片</button>
-      <button class="select-btn" @click="goTo('text')">填写文本</button>
+      <button class="select-btn" @click="goTo('upload')">上传聊天截图</button>
+      <button class="select-btn" @click="goTo('text')">填写聊天内容</button>
+      <button class="select-btn" @click="goTo('text')">直接提问</button>
     </div>
   </div>
 </template>
@@ -30,10 +31,6 @@ function goTo(type: string) {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
-  background: #f8fafc;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
   padding: 48px 24px;
 }
 
@@ -52,6 +49,7 @@ function goTo(type: string) {
 
 .btn-group {
   display: flex;
+  flex-direction: column;
   gap: 24px;
 }
 
@@ -64,9 +62,7 @@ function goTo(type: string) {
   color: #fff;
   cursor: pointer;
   font-weight: 600;
-  transition:
-    background 0.2s,
-    transform 0.2s;
+  transition: all 0.2s ease-in-out;
   box-shadow: 0 2px 8px rgba(95, 109, 255, 0.08);
 
   &:hover {
