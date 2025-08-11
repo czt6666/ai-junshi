@@ -14,7 +14,7 @@ import { ref, onMounted } from 'vue'
 import { useUserDataStore } from '@/stores/userData'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-import { aiJunshiOnce } from '@/utils/gptRequest'
+import { aiJunshiOnce, aiJunshiStream } from '@/utils/gptRequest'
 
 const router = useRouter()
 const userDataStore = useUserDataStore()
@@ -26,8 +26,21 @@ const text = type.value === 'text' ? (content.value as string) : null
 const outputText = ref<string>('正在生成回复...')
 
 const getJunshiResponse = async () => {
-  const res = await aiJunshiOnce(text || '', image ? await fileToBase64URL(image) : undefined)
-  outputText.value = res
+  let firstTrunk = true
+  try {
+    const stream = aiJunshiStream(text ? text : '我该怎么回复她', image ? await fileToBase64URL(image) : undefined)
+    for await (const text of stream) {
+      if (firstTrunk) {
+        outputText.value = ''
+        firstTrunk = false
+      }
+      outputText.value += text
+    }
+  } catch (error) {
+    console.error('获取军师回复失败:', error)
+    outputText.value = '获取回复失败，请稍后再试。'
+    return
+  }
 }
 
 const fileToBase64URL = (file: File): Promise<string> => {
