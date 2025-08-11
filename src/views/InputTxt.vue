@@ -5,7 +5,6 @@
 </template>
 
 <script lang="ts" setup name="Result">
-import { ref, reactive } from 'vue'
 import ChatEditor from '@/components/ChatEditor.vue'
 import { useRouter } from 'vue-router'
 import { useUserDataStore } from '@/stores/userData'
@@ -13,7 +12,7 @@ import { useUserDataStore } from '@/stores/userData'
 const router = useRouter()
 const userDataStore = useUserDataStore()
 
-const handleConfirm = (messages: any) => {
+const handleConfirm = (messages: string) => {
   console.log('Confirmed messages:', messages)
   userDataStore.setData('text', messages)
   router.push({ name: 'Confirm' })

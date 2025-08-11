@@ -49,6 +49,5 @@ export const useDeviceStore = defineStore('device', {
 
   persist: {
     storage: sessionStorage,
-    paths: ['screenWidth'],
   },
 })

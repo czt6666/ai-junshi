@@ -21,19 +21,6 @@ function goTo(type: string) {
     router.push({ name: 'InputTxt' })
   }
 }
-import ImageUploader from '@/components/ImageUploader.vue'
-import ChatEditor from '@/components/ChatEditor.vue'
-import { ref } from 'vue'
-import { useDeviceStore } from '@/stores/device'
-// import '@/utils/doubBaoRequest'
-import '@/utils/gptRequest'
-const store = useDeviceStore()
-
-const handleUploadedFile = (file: File) => {
-  console.log('收到上传的文件:', file)
-  // 后续处理，如 OCR、上传至服务器等
-}
-
 // console.log(store.getters.deviceType)
 </script>
 

@@ -1,15 +1,17 @@
 // aiJunshi.ts
 import imgBase64 from './base64'
-const OPENAI_API_KEY =
-  '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'
-const BASE_URL = 'https://api.openai.com/v1/chat/completions'
+// const OPENAI_API_KEY =
+// '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'
+// const BASE_URL = 'https://api.openai.com/v1/chat/completions'
+const OPENAI_API_KEY = 'sk-PBX3TpQMdxqfqvixYNPKlLbtKWbLR3069QsCPnyqrUWAfFLW'
+const BASE_URL = 'https://yibuapi.com/v1/messages'
 const MODEL = 'gpt-4o-mini'
 
 type TextContent = { type: 'text'; text: string }
 type ImageContent = { type: 'image_url'; image_url: { url: string } }
 
 interface ChatMessage {
-  role: 'system' | 'user' | 'assistant'
+  type: 'system' | 'user' | 'assistant'
   content: (TextContent | ImageContent)[]
 }
 
@@ -22,22 +24,40 @@ interface ChatOptions {
  * 解析 OpenAI Chat 流式输出
  */
 function parseSSEChunk(chunk: string): string[] {
-  const lines = chunk.split('\n').filter((line) => line.trim().startsWith('data:'))
+  const lines = chunk.split('\n').filter((l) => l.startsWith('data: '))
   const texts: string[] = []
 
   for (const line of lines) {
-    const jsonStr = line.replace(/^data:\s*/, '')
-    if (jsonStr === '[DONE]') continue
+    const dataStr = line.slice(6).trim()
+    if (!dataStr || dataStr === '[DONE]') continue
+
     try {
-      const json = JSON.parse(jsonStr)
-      const delta = json.choices?.[0]?.delta?.content
-      if (delta) texts.push(delta)
+      const obj = JSON.parse(dataStr)
+      const text = obj?.delta?.text || obj?.delta?.content || obj?.delta?.content_block_delta?.delta?.text
+      if (typeof text === 'string' && text) {
+        texts.push(text)
+      }
     } catch {
-      // 跳过无法解析的行
+      // 忽略无法解析的行
     }
   }
-
   return texts
+}
+
+function buildMessages(text: string, base64Image?: string): ChatMessage[] {
+  return [
+    {
+      type: 'system',
+      content: [{ type: 'text', text: '假如你是一个恋爱经历丰富的情感大师，你现在要帮助我回复女朋友的消息。' }],
+    },
+    {
+      type: 'user',
+      content: [
+        { type: 'text', text },
+        ...(base64Image ? ([{ type: 'image_url', image_url: { url: base64Image } }] as ImageContent[]) : []),
+      ],
+    },
+  ]
 }
 
 /**
@@ -62,7 +82,7 @@ async function requestChatOnce(options: ChatOptions) {
 }
 
 /**
- * 底层封装 - 流式请求（使用 generator）
+ * 底层封装 - 流式请求
  */
 async function* requestChatStream(options: ChatOptions) {
   const { messages } = options
@@ -88,61 +108,32 @@ async function* requestChatStream(options: ChatOptions) {
     const { value, done } = await reader.read()
     if (done) break
     const chunk = decoder.decode(value, { stream: true })
+    console.log('[流式数据start]', chunk, '[流式数据end]')
+
     for (const text of parseSSEChunk(chunk)) {
       yield text
     }
   }
 }
 
-/**
- * 上层封装 - AI 军师
- * @param text 用户输入文字
- * @param base64Image 可选的 base64 图片（带 data:image/png;base64,... 前缀）
- * @param stream 是否流式
- */
-async function aiJunshi(text: string, base64Image?: string, stream = false): Promise<any> | AsyncGenerator<string> {
-  const messages: ChatMessage[] = [
-    {
-      role: 'system',
-      content: [
-        {
-          type: 'text',
-          text: '你是一个恋爱聊天军师，帮用户回复女生的信息，展现男人的自信、幽默和魅力。',
-        },
-      ],
-    },
-    {
-      role: 'user',
-      content: [
-        { type: 'text', text },
-        ...(base64Image ? ([{ type: 'image_url', image_url: { url: base64Image } }] as ImageContent[]) : []),
-      ],
-    },
-  ]
+export async function aiJunshiOnce(text: string, base64Image?: string) {
+  const messages = buildMessages(text, base64Image)
+  const res = await requestChatOnce({ messages, stream: false })
+  return res.content[0].text
+}
 
-  if (stream) {
-    return requestChatStream({ messages, stream: true })
-  } else {
-    return requestChatOnce({ messages, stream: false })
-  }
+export async function* aiJunshiStream(text: string, base64Image?: string) {
+  const messages = buildMessages(text, base64Image)
+  yield* requestChatStream({ messages, stream: true })
 }
 
 // ======== 示例调用 ========
+async function main() {
+  const stream = aiJunshiStream('帮我幽默地回复：你吃饭了吗？')
+  for await (const chunk of stream) {
+    console.log('流式增量：', chunk)
+  }
 
-// 一次性请求
-aiJunshi(
-  '她说她今天很累',
-  'https://czt666.cn/junshi/images/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2025-08-10_205353_572.jpg',
-  false,
-).then((res: any) => {
-  console.log('一次性结果：', res.choices[0].message.content)
-})
-
-// // 流式请求
-// ;(async () => {
-//   const stream = (await aiJunshi("帮我幽默地回复：'你吃饭了吗？'", undefined, true)) as AsyncGenerator<string>
-//   for await (const chunk of stream) {
-//     // 每次增量输出
-//     console.log('流式增量：', chunk)
-//   }
-// })()
+  const response = await aiJunshiOnce('帮我幽默地回复：你吃饭了吗？', imgBase64)
+  console.log('一次性结果：', response)
+}

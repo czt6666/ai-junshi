@@ -37,7 +37,7 @@ const router = useRouter()
 type Message = {
   id: number
   from: 'me' | 'ta' | 'system' | 'time'
-  text: string | object // Use string for regular messages, object for complex data like system or time
+  text: string
 }
 
 const emit = defineEmits(['confirm'])
@@ -51,7 +51,7 @@ const messages = ref<Message[]>([
 const addMessage = (from: 'me' | 'ta' | 'system' | 'time') => {
   let text: string | object = ''
   if (from === 'system') {
-    text = { type: 'info', content: 'This is a system message' } // Example system message object
+    text = 'This is a system message'
   } else if (from === 'time') {
     text = new Date().toLocaleTimeString() // Current time as a string
   }

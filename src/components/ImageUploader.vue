@@ -56,9 +56,8 @@ const emit = defineEmits<{
   (e: 'upload', file: File): void
 }>()
 
-const handleFileUpload = async (error, fileItem) => {
+const handleFileUpload = async (error: any, fileItem: any) => {
   if (error) return
-
   const rawFile = fileItem.file // 原生 File 对象
   const miniFile = await compressImage(rawFile)
   if (miniFile) {

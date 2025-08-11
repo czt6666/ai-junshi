@@ -1,12 +1,15 @@
 <template>
   <div class="system-message">
-    <p>{{ message.content }}</p>
+    <p>{{ message }}</p>
   </div>
 </template>
 
 <script lang="ts" setup>
 defineProps({
-  message: Object, // Accepting a system message object
+  message: {
+    type: String,
+    default: '',
+  },
 })
 </script>
 
