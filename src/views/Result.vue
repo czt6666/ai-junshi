@@ -24,11 +24,12 @@ const prompt = '我怎么回复她的消息'
 
 // 判断输入类型
 const image = type.value === 'image' && content.value instanceof File ? content.value : null
-const text = type.value === 'text' && Array.isArray(content.value) ? content.value : null
+const text = type.value === 'text' ? content.value : null
 
 const outputRef = ref<HTMLElement | null>(null)
-const apiKey =
-  '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'
+// const apiKey =
+//   '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'
+const apiKey = 'sk-7aCCaTOWuOONRyFJ5EFBqQLZb3NkTGPe6oAlmFx3JGpzdyhr'
 
 const callOpenAI = async () => {
   try {
@@ -38,12 +39,12 @@ const callOpenAI = async () => {
     }
 
     const body: any = {
-      model: image ? 'gpt-4-vision-preview' : 'gpt-4',
+      model: image ? 'gpt-4.1-mini' : 'gpt-4',
       messages: [
-        {
-          role: 'system',
-          content: '假如你是一个恋爱经历丰富的情感大师，你现在要帮助我回复女朋友的消息。',
-        },
+        // {
+        //   role: 'system',
+        //   content: '假如你是一个恋爱经历丰富的情感大师，你现在要帮助我回复女朋友的消息。',
+        // },
         {
           role: 'user',
           content: image
@@ -56,13 +57,14 @@ const callOpenAI = async () => {
                   },
                 },
               ]
-            : `${prompt}\n${text?.join('\n')}`,
+            : `${prompt}\n${text}`,
         },
       ],
       max_tokens: 1000,
     }
 
-    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    // const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    const res = await fetch('https://use.52apikey.cn/v1/chat/completions', {
       method: 'POST',
       headers,
       body: JSON.stringify(body),
