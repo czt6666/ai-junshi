@@ -3,9 +3,9 @@
     <h2 class="title">请选择操作方式</h2>
     <p class="desc">您希望通过哪种方式进行？</p>
     <div class="btn-group">
-      <button class="select-btn" @click="goTo('upload')">上传聊天截图</button>
-      <button class="select-btn" @click="goTo('text')">填写聊天内容</button>
-      <button class="select-btn" @click="goTo('text')">直接提问</button>
+      <button class="select-btn" @click="goTo('UploadImg')">上传聊天截图</button>
+      <button class="select-btn" @click="goTo('InputTxt')">填写聊天内容</button>
+      <button class="select-btn" @click="goTo('Confirm')">直接提问</button>
     </div>
   </div>
 </template>
@@ -15,14 +15,9 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-function goTo(type: string) {
-  if (type === 'upload') {
-    router.push({ name: 'UploadImg' })
-  } else if (type === 'text') {
-    router.push({ name: 'InputTxt' })
-  }
+function goTo(name: string) {
+  router.push({ name })
 }
-// console.log(store.getters.deviceType)
 </script>
 
 <style lang="scss" scoped>
