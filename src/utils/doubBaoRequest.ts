@@ -86,7 +86,7 @@ export async function* aiJunshiStream(text: string, base64Image?: string): Async
       role: 'user',
       content: [
         { type: 'text', text },
-        ...(base64Image ? [{ type: 'image_url', image_url: { url: base64Image } }] : []),
+        ...(base64Image ? [{ type: 'image_url' as const, image_url: { url: base64Image } }] : []),
       ],
     },
   ]

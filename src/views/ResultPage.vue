@@ -1,6 +1,6 @@
 <template>
   <div class="result-container">
-    <h2>恋爱大师回复助手 ❤️</h2>
+    <!-- <h2>恋爱大师回复助手 ❤️</h2> -->
     <div class="output" ref="outputRef">{{ outputText }}</div>
     <div class="btns">
       <button @click="router.push({ name: 'UploadImg' })">重新上传图片</button>
