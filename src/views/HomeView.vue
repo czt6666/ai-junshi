@@ -3,9 +3,9 @@
     <h2 class="title">请选择操作方式</h2>
     <p class="desc">您希望通过哪种方式进行？</p>
     <div class="btn-group">
-      <button class="select-btn" @click="goTo('UploadImg')">上传聊天截图</button>
-      <button class="select-btn" @click="goTo('InputTxt')">填写聊天内容</button>
-      <button class="select-btn" @click="goTo('Confirm')">直接提问</button>
+      <button class="select-btn" @click="goTo('UploadImg')">分析聊天截图</button>
+      <button class="select-btn" @click="goTo('InputTxt')">输入聊天记录</button>
+      <button class="select-btn" @click="goTo('Confirm')">直接提问AI</button>
     </div>
   </div>
 </template>

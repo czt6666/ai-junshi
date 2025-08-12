@@ -1,10 +1,15 @@
 <template>
   <div class="result-container">
     <!-- <h2>恋爱大师回复助手 ❤️</h2> -->
+    {{ chatScreenshotList }}
+    {{ chatHistoryText }}
+    {{ userPrompt }}
     <div class="output" ref="outputRef">{{ outputText }}</div>
     <div class="btns">
+      <button @click="router.push({ name: 'HomePage' })">回到首页</button>
       <button @click="router.push({ name: 'UploadImg' })">重新上传图片</button>
       <button @click="router.push({ name: 'InputTxt' })">重新输入文本</button>
+      <button @click="userDataStore.clear()">clear</button>
     </div>
   </div>
 </template>
@@ -35,8 +40,13 @@ const getJunshiResponse = async () => {
   const prompt = userPrompt.value ? `${userPrompt.value} \n\n` : ''
   const chatText = chatHistoryText.value ? `下面是我的聊天记录：\n ${chatHistoryText.value}` : ''
   const text = prompt + chatText
-  const res = await aiJunshiOnce(text || '', imageBase64 ? imageBase64 : undefined)
-  outputText.value = res
+  try {
+    const res = await aiJunshiOnce(text || '', imageBase64 ? imageBase64 : undefined)
+    outputText.value = res
+    userDataStore.clear()
+  } catch (err) {
+    alert('请求失败！')
+  }
 }
 
 // utils/fileToBase64.ts
@@ -61,8 +71,6 @@ onMounted(() => {
   margin: 40px auto;
   padding: 24px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  background: #fffbe6;
   font-family: 'Helvetica Neue', sans-serif;
 
   h2 {
@@ -87,8 +95,15 @@ onMounted(() => {
 
 .btns {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   margin-top: 16px;
   justify-content: center;
+}
+
+.network {
+  width: 100%;
+  height: 500px;
+  background-color: lightblue;
 }
 </style>

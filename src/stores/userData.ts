@@ -41,8 +41,8 @@ export const useUserDataStore = defineStore('userData', {
       this.systemPrompt = ''
       this.userPrompt = ''
       this.chatHistoryText = ''
-      this.chatScreenshotList = []
-      this.modelReplyHistory = []
+      this.chatScreenshotList.length = 0
+      this.modelReplyHistory.length = 0
     },
   },
 

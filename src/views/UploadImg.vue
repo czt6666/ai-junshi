@@ -4,8 +4,8 @@
       name="chat-image"
       label="点击上传截图 或 拖入聊天记录 📤"
       maxFileSize="5MB"
-      allowMultiple="true"
-      stylePanelAspectRatio="9:16"
+      :allowMultiple="true"
+      stylePanelAspectRatio="1:1"
       @upload="handleUploadedFile"
     />
   </div>
@@ -30,7 +30,7 @@ const handleUploadedFile = async (file: File) => {
 
   const id = uuidv4()
   await saveFile(id, file)
-  userDataStore.setUserPrompt(id)
+  userDataStore.addScreenshot(id)
 }
 
 const confirmImage = () => {
@@ -41,7 +41,7 @@ const confirmImage = () => {
 <style lang="scss" scoped>
 .img-upload {
   overflow: hidden;
-  padding: 0 25%;
+  padding: 0 24px;
   width: 100%;
   max-height: 60vh;
 

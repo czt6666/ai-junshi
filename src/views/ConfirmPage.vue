@@ -3,15 +3,18 @@
     <h4 class="title">将要把以下内容发送给大模型，请确认:</h4>
     <div class="images" v-if="fileUrls?.length">
       <div v-for="(urlRef, index) in fileUrls" :key="index">
-        <img :src="urlRef" style="max-width: 200px" />
+        <img :src="urlRef.value" style="max-width: 100px" />
       </div>
     </div>
-    <pre class="chat-text" v-if="chatHistoryText">{{ chatHistoryText }}</pre>
+    <div class="chat-text" v-if="chatHistoryText">
+      <pre>{{ chatHistoryText }}</pre>
+    </div>
     <div class="prompt">
-      <span>自定义提示消息：</span>
-      <input type="text" :value="userPrompt" @input="handleInput" />
+      <p>自定义提示消息：</p>
+      <input type="text" placeholder="请输入自定义提示消息" :value="userPrompt" @input="handleInput" />
     </div>
     <div class="btns">
+      <button @click="router.push({ name: 'HomePage' })">回到首页</button>
       <button @click="router.push({ name: 'UploadImg' })">重选图片</button>
       <button @click="router.push({ name: 'InputTxt' })">重选文本</button>
       <button @click="router.push({ name: 'Result' })">提问ai军师</button>
@@ -31,12 +34,12 @@ const userDataStore = useUserDataStore()
 const { userPrompt, chatHistoryText, chatScreenshotList } = storeToRefs(userDataStore)
 
 const fileUrls = computed(() => {
+  console.log(chatScreenshotList.value)
+
   return chatScreenshotList.value.map((id) => useFileUrl(id))
 })
 
 const handleInput = (e) => {
-  console.log(e.target.value)
-
   userDataStore.setUserPrompt(e.target.value)
 }
 
@@ -73,9 +76,10 @@ function useFileUrl(fileId: string) {
 }
 .images {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   width: 100%;
-  height: 320px;
+  justify-content: center;
+  align-items: center;
   background-color: lightblue;
 
   img {
@@ -84,12 +88,13 @@ function useFileUrl(fileId: string) {
 }
 .chat-text {
   background: #f8fafc;
-  padding: 16px;
+  padding: 12px 16px;
   border-radius: 8px;
   font-size: 1.1rem;
   color: #22223b;
   white-space: pre-wrap;
   max-width: 600px;
+  margin: 12px 0;
 }
 .prompt {
   overflow: hidden;
@@ -102,10 +107,12 @@ function useFileUrl(fileId: string) {
     border: none;
     outline: none;
     padding: 12px;
+    background-color: #fefefe;
   }
 }
 .btns {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   margin-top: 16px;
   justify-content: center;
