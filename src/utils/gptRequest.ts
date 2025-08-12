@@ -1,10 +1,9 @@
 // aiJunshi.ts
 import imgBase64 from './base64'
-const OPENAI_API_KEY =
-  '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'
-const BASE_URL = 'https://api.openai.com/v1/chat/completions'
-// const OPENAI_API_KEY = 'sk-PBX3TpQMdxqfqvixYNPKlLbtKWbLR3069QsCPnyqrUWAfFLW'
-// const BASE_URL = 'https://yibuapi.com/v1/messages'
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY_01
+const BASE_URL = import.meta.env.VITE_OPENAI_BASE_URL
+// const OPENAI_API_KEY = import.meta.env.VITE_TRANS_API_KEY_01
+// const BASE_URL = import.meta.env.VITE_TRANS_BASE_URL
 const MODEL = 'gpt-4o'
 
 type TextContent = { type: 'text'; text: string }
@@ -47,52 +46,17 @@ function parseSSEChunk(chunk: string): string[] {
   }
   return texts
 }
-const o = {
-  id: 'chatcmpl-C3GdyXyJsfYOMKT5Qpxs2ErnAPuHa',
-  object: 'chat.completion.chunk',
-  created: 1754894998,
-  model: 'gpt-4o-2024-08-06',
-  service_tier: 'default',
-  system_fingerprint: 'fp_ff25b2783a',
-  choices: [{ index: 0, delta: { content: '呢' }, logprobs: null, finish_reason: null }],
-  obfuscation: 'GrI5enKJBRe0',
-}
 
 function buildMessages(text?: string, base64Image?: string): ChatMessage[] {
   if (!text && !base64Image) {
     throw new Error('至少需要提供文本或图片内容')
   }
 
-  // return [
-  //   // {
-  //   //   role: 'system',
-  //   //   content: '你是一个有恋爱智慧的情感大师。',
-  //   // },
-  //   {
-  //     role: 'user',
-  //     content: [
-  //       {
-  //         type: 'text',
-  //         text: '这是什么',
-  //       },
-  //       {
-  //         type: 'image_url',
-  //         image_url: {
-  //           // url: `data:image/jpeg;base64,${base64Image}`,
-  //           // url: base64Image,
-  //           url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg',
-  //           // url: 'https://czt666.cn/projects/junshi/images/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2025-08-10_205353_572.jpg',
-  //         },
-  //       },
-  //     ],
-  //   },
-  // ]
-
   return [
     {
       role: 'system',
       content:
-        '假如你是一个恋爱经历丰富的情感大师，你现在要帮助我回复女朋友的消息。要调动聊天兴趣，同时保持神秘不可预测的聊天风格',
+        '假如你是一个恋爱经历丰富的情感大师，你现在要帮助我回复女生朋友的消息。要调动聊天兴趣，同时保持神秘不可预测的聊天风格',
     },
     {
       role: 'user',
