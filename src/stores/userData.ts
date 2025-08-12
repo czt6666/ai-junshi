@@ -1,4 +1,3 @@
-// stores/userData.ts
 import { defineStore } from 'pinia'
 
 export interface UserDataState {
@@ -47,9 +46,9 @@ export const useUserDataStore = defineStore('userData', {
     },
   },
 
-  persist: {
-    key: 'user-data',
-    storage: localStorage,
-    // pick: ['systemPrompt', 'userPrompt', 'chatHistoryText', 'modelReplyHistory', 'chatScreenshotList'], // 持久化 uuid
-  },
+  // persist: {
+  // key: 'user-data',
+  // storage: localStorage,
+  // pick: ['systemPrompt', 'userPrompt', 'chatHistoryText', 'modelReplyHistory', 'chatScreenshotList'], // 持久化 uuid
+  // },
 })
