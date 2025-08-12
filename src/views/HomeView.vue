@@ -12,6 +12,7 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
+import '@/utils/gptRequest'
 
 const router = useRouter()
 

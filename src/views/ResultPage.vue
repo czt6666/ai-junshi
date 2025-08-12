@@ -20,7 +20,7 @@ import { useUserDataStore } from '@/stores/userData'
 import { storeToRefs } from 'pinia'
 import { getFile } from '@/utils/indexedDb'
 import { useRouter } from 'vue-router'
-import { aiJunshiOnce } from '@/utils/gptRequest'
+import { aiJunshiOnce, aiJunshiStream } from '@/utils/gptRequest'
 
 const router = useRouter()
 const userDataStore = useUserDataStore()
