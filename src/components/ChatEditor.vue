@@ -79,6 +79,8 @@ const confirmMessages = () => {
 }
 
 function getTextContent(messages: Message[]): string {
+  console.log('messages', messages)
+
   return messages
     .filter((item) => item.text && item.text.trim() !== '')
     .map((item) => {

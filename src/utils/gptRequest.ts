@@ -1,9 +1,9 @@
 // aiJunshi.ts
 import imgBase64 from './base64'
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY_01
-const BASE_URL = import.meta.env.VITE_OPENAI_BASE_URL
-// const OPENAI_API_KEY = import.meta.env.VITE_TRANS_API_KEY_01
-// const BASE_URL = import.meta.env.VITE_TRANS_BASE_URL
+// const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY_01
+// const BASE_URL = import.meta.env.VITE_OPENAI_BASE_URL
+const OPENAI_API_KEY = import.meta.env.VITE_TRANS_API_KEY_01
+const BASE_URL = import.meta.env.VITE_TRANS_BASE_URL
 const MODEL = 'gpt-4o'
 
 type TextContent = { type: 'text'; text: string }
